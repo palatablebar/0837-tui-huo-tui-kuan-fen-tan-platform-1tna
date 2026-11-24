@@ -19,3 +19,15 @@
 ## 批次
 
 同一来源重复执行得到同一批次数值。签发要求阻断项为零，并携带当前版本号；旧版本提交会被拒绝。证据只在签发后生成。
+
+## 坏行归属与订单级复核
+
+坏行指无法安全成为商品行的记录：采信层的 `COLUMN_COUNT`、`CONFLICT_DUPLICATE`、`KEY_MISSING`，以及整理层的 `INVALID_*`、`BAD_RETURN_QTY`、`BAD_AMOUNT`。空行、重复表头与精确重复不属于需要归属的坏行。
+
+- 坏行能认出 `order_id` 归属时，只把对应订单置为 `HELD`，其他 `READY` 订单照常逐单签发。
+- 同一 `line_id` 被两个不同 `order_id` 认领（典型为跨单冲突重复）时，两张订单都暂缓；归属集合取坏行显式订单与该商品行在全部来源行中出现过的订单并集。
+- 坏行的 `order_id` 与 `line_id` 都无法定位任何订单时，`batch_hold=true`，整批暂缓，任何订单都不能签发。
+- 补正（按来源行号、`line_id` 或整体替换 `rows`）后，按完整订单重新执行整理、优惠分摊与运费规则；旧待签金额失效（`amount_version` 递增、旧值进 `invalidated_amount`），用旧版本签发会被 `STALE_AMOUNT` 拒绝。
+- 已签发订单的金额与凭证（voucher）冻结，后续任何补正或重算都不改写；整批证据仍只在整批 `APPROVED` 后生成。
+- 签发按 `(run_id, order_id)` 幂等，并支持 `Idempotency-Key`；补正失败（`CORRECTION_FAILED`）不落库，可用新的补正重试，同一订单始终只产生一张凭证。
+

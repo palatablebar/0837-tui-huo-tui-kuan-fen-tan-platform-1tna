@@ -29,12 +29,17 @@
     </article>
     <article class="panel" id="panel-review">
       <div class="panel-head"><h2>批次复核</h2><span class="hint" id="revision">rev 0</span></div>
+      <div id="batch-hold-banner" class="batch-hold" hidden></div>
+      <div id="order-board" class="order-board" aria-live="polite">
+        <p class="empty">执行批次后，按订单显示暂缓、补正与签发状态。</p>
+      </div>
       <div class="review">
-        <label for="comment">复核意见</label>
+        <label for="comment">复核意见（整批签发 / 暂缓）</label>
         <textarea id="comment" placeholder="核验来源、边界与批次结论"></textarea>
         <div class="review-actions">
-          <button id="sign" type="button" disabled>签发</button>
-          <button id="hold" type="button" disabled>暂缓</button>
+          <button id="issue-ready" type="button" disabled>签发可签订单</button>
+          <button id="sign" type="button" disabled>整批签发并出证据</button>
+          <button id="hold" type="button" disabled>整批暂缓</button>
           <a id="download" href="#" download hidden>下载复核证据</a>
         </div>
       </div>

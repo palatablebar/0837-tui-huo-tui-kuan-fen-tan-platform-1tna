@@ -29,3 +29,38 @@
   .p0837 .panel, .p0837 .metric { min-width: 0 !important; }
   .p0837 .table-wrap { max-width: 100%; overflow-x: auto; }
 }
+
+/* M6 订单级暂缓 / 补正 / 签发 */
+.p0837 .order-board { display: grid; gap: 10px; margin-bottom: 12px; }
+.p0837 .order-board .empty { color: var(--muted); font-size: 13px; margin: 0; }
+.p0837 .batch-hold { background: var(--soft); border: 1px solid var(--danger); color: var(--danger);
+  border-radius: var(--radius); padding: 8px 10px; font-size: 13px; margin-bottom: 10px; }
+.p0837 .order-card { border: 1px solid var(--line); border-left-width: 3px; border-radius: var(--radius);
+  padding: 9px 11px; background: color-mix(in srgb, var(--surface) 96%, transparent); display: grid; gap: 6px; }
+.p0837 .order-card[data-status="HELD"] { border-left-color: #b58a2a; }
+.p0837 .order-card[data-status="BLOCKED"] { border-left-color: var(--danger); }
+.p0837 .order-card[data-status="READY"] { border-left-color: #4a7a4f; }
+.p0837 .order-card[data-status="ISSUED"] { border-left-color: var(--accent); }
+.p0837 .order-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.p0837 .order-head strong { font-size: 15px; }
+.p0837 .order-head .amt { margin-left: auto; font-family: var(--num); font-size: 13px; }
+.p0837 .order-head .amt small { color: var(--muted); }
+.p0837 .issued-amt { color: var(--accent); font-weight: 700; }
+.p0837 .verdict[data-v="READY"], .p0837 .verdict[data-v="ISSUED"], .p0837 .verdict[data-v="PASS"] { color: #3f6b45; }
+.p0837 .verdict[data-v="HELD"] { color: #9a7416; }
+.p0837 .reason-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.p0837 .reason-chips code { background: var(--soft); color: var(--danger); border-radius: 4px;
+  padding: 1px 6px; font-size: 11px; }
+.p0837 .bad-lines { margin: 0; padding-left: 18px; color: var(--muted); font-size: 12px; display: grid; gap: 2px; }
+.p0837 .bad-lines code { color: var(--danger); }
+.p0837 .stale-note { margin: 0; font-size: 12px; color: #9a7416; }
+.p0837 .voucher { margin: 0; font-size: 12px; color: var(--muted); }
+.p0837 .voucher a { color: var(--accent); font-family: var(--num); }
+.p0837 .correct summary { cursor: pointer; font-size: 12px; color: var(--muted); }
+.p0837 .correction-json { width: 100%; min-height: 120px; font-family: var(--num); font-size: 11px;
+  margin: 6px 0; resize: vertical; }
+.p0837 .correct-actions, .p0837 .order-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+.p0837 .order-actions button, .p0837 .correct-actions button { font-size: 12px; padding: 5px 10px; }
+.p0837 button.primary { background: var(--accent); color: color-mix(in srgb, var(--surface) 94%, white);
+  border-color: var(--accent); }
+.p0837 .action-error { margin: 0; color: var(--danger); font-size: 12px; }

@@ -18,16 +18,30 @@ MESSAGES = {
     "GATE_BLOCKED": "存在阻断项，不能签发",
     "NOT_APPROVED": "批次尚未签发",
     "BAD_REQUEST": "请求内容不完整",
+    "ORDER_NOT_FOUND": "订单不存在",
+    "ORDER_HELD": "订单仍被坏行或复核暂缓，不能签发",
+    "BATCH_HELD": "存在无法归属的坏行，整批暂缓",
+    "ORDER_BLOCKED": "订单存在计算阻断项，不能签发",
+    "ORDER_ALREADY_ISSUED": "订单已签发，金额与凭证保持不变",
+    "STALE_AMOUNT": "待签金额已因补正失效，请按重算金额复核",
+    "CORRECTION_FAILED": "补正未通过校验，请修正后重试",
+    "CORRECTION_TARGET_NOT_FOUND": "找不到要补正的坏行",
+    "AMOUNT_UNAVAILABLE": "订单金额尚不完整，不能签发",
+    "IDEMPOTENCY_CONFLICT": "幂等键对应另一张订单",
 }
 
 
 class DomainIssue(Exception):
-    def __init__(self, code: str, status: int = 400, detail: str | None = None):
+    def __init__(self, code: str, status: int = 400, detail: str | None = None, extra: dict | None = None):
         self.code = code
         self.status = status
         self.detail = detail
+        self.extra = extra or {}
         super().__init__(code)
 
 
 def error_response(exc: DomainIssue):
-    return jsonify(error=exc.detail or MESSAGES.get(exc.code, "请求无法处理"), code=exc.code), exc.status
+    body = dict(error=exc.detail or MESSAGES.get(exc.code, "请求无法处理"), code=exc.code)
+    if exc.extra:
+        body.update(exc.extra)
+    return jsonify(body), exc.status

@@ -33,7 +33,9 @@ def _typed(rows):
                 item[field] = PARSERS[kind](item.get(field), code)
             typed.append(item)
         except ValueError as exc:
-            issues.append({"line": raw.get("_line", 0), "key": raw.get(SPEC["key"], ""), "code": str(exc)})
+            issues.append({"line": raw.get("_line", 0), "key": raw.get(SPEC["key"], ""),
+                           "code": str(exc), "order_id": raw.get("order_id", "") or "",
+                           "order_ids": [raw["order_id"]] if raw.get("order_id") else []})
     return typed, issues
 
 
@@ -51,5 +53,7 @@ def prepare_rows(rows):
                 raise ValueError("BAD_AMOUNT")
             items.append(item)
         except ValueError as exc:
-            issues.append({"line": item.get("_line", 0), "key": item.get(SPEC["key"], ""), "code": str(exc)})
+            issues.append({"line": item.get("_line", 0), "key": item.get(SPEC["key"], ""),
+                           "code": str(exc), "order_id": item.get("order_id", "") or "",
+                           "order_ids": [item["order_id"]] if item.get("order_id") else []})
     return items, issues
